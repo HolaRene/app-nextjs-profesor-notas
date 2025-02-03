@@ -5,67 +5,28 @@ import { notasZodSchema } from '@/zodEsquema/zodform'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface FormComponentNotas {
   id: string
 }
 
-function FormEditNota({ id }: FormComponentNotas) {
+function FormCrearNota({ id }: FormComponentNotas) {
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
   } = useForm<NotasForm>({
     resolver: zodResolver(notasZodSchema),
   })
+  console.log(id)
 
   const navegar = useRouter()
-  const {
-    error: NotasErrores,
-    updateNotas,
-    obtenerNotasId,
-    notasID,
-  } = useNotas()
-
-  // Obtener los datos de la nota por ID
-  useEffect(() => {
-    const notasPOrID = async () => {
-      try {
-        const response = await obtenerNotasId(id)
-        console.log('Respuesta completa:', response.data.nota.estudiante)
-      } catch (error) {
-        console.error('Error al obtener los datos de la nota:', error)
-      }
-    }
-
-    notasPOrID()
-  }, [id])
-
-  // Prellenar el formulario cuando notasID esté disponible
-  useEffect(() => {
-    if (notasID) {
-      // Prellenar el formulario con los datos obtenidos
-      reset({
-        estudiante: notasID.nota.estudiante._id, // ID del estudiante
-        materia: notasID.nota.materia as
-          | 'Matemáticas'
-          | 'Ciencias'
-          | 'Historia', // Type assertion
-        calificacion: notasID.nota.calificacion, // Calificación
-        profesor: notasID.nota.profesor?._id, // ID del profesor (opcional)
-      })
-    }
-  }, [notasID]) // Este efecto se ejecuta cuando notasID cambia
-
+  const { error: NotasErrores } = useNotas()
+  console.log(NotasErrores)
   const onSubmit = async (datos: NotasForm) => {
-    // Lógica para actualizar la nota
-    const res = await updateNotas(id, datos)
     console.log('Datos del formulario:', datos)
     navegar.push('/personal/notas')
-    console.log(res)
   }
 
   return (
@@ -79,7 +40,7 @@ function FormEditNota({ id }: FormComponentNotas) {
             {NotasErrores}
           </p>
         )}
-        <h2 className='text-2xl font-bold text-gray-800'>Actualizar Nota</h2>
+        <h2 className='text-2xl font-bold text-gray-800'>Crear Nota</h2>
 
         {/* Campo: Estudiante (no editable) */}
         <div>
@@ -91,7 +52,6 @@ function FormEditNota({ id }: FormComponentNotas) {
             type='text'
             {...register('estudiante')}
             className='w-full p-2 border rounded text-slate-800 bg-gray-200'
-            disabled // Deshabilita el campo
           />
           {errors.estudiante && (
             <p className='text-red-500'>{errors.estudiante.message}</p>
@@ -107,7 +67,6 @@ function FormEditNota({ id }: FormComponentNotas) {
             id='materia'
             {...register('materia')}
             className='w-full p-2 border rounded text-slate-800 bg-gray-200'
-            disabled // Deshabilita el campo
           >
             <option value=''>Selecciona una materia</option>
             <option value='Matemáticas'>Matemáticas</option>
@@ -129,7 +88,6 @@ function FormEditNota({ id }: FormComponentNotas) {
             type='text'
             {...register('profesor')}
             className='w-full p-2 border rounded text-slate-800 bg-gray-200'
-            disabled // Deshabilita el campo
           />
           {errors.profesor && (
             <p className='text-red-500'>{errors.profesor.message}</p>
@@ -178,4 +136,4 @@ function FormEditNota({ id }: FormComponentNotas) {
   )
 }
 
-export default FormEditNota
+export default FormCrearNota

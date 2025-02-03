@@ -1,5 +1,9 @@
 import { z } from 'zod'
-import { authZodSchema, loginZodSchema } from '@/zodEsquema/zodform'
+import {
+  authZodSchema,
+  estudianteZodSchema,
+  loginZodSchema,
+} from '@/zodEsquema/zodform'
 import {
   LoginResponse,
   ProfesorLogin,
@@ -13,6 +17,16 @@ import {
   NotasForm,
   NotasIdState,
 } from '@/interfaces/notas'
+import {
+  EstudianteActualizadoResponse,
+  EstudianteCreadoResponse,
+  EstudianteForm,
+  EstudianteResponseById,
+  EstudianteResponseByIdState,
+  EstudiantesPorProfesor,
+  EstudiantesResponse,
+  GetEstudiante,
+} from '@/interfaces/estudiantes'
 
 // Tipo para el contexto de autenticación
 export type AuthContextType = {
@@ -36,6 +50,21 @@ export type NotasContextType = {
   obtenerNotas: () => Promise<void>
   obtenerNotasId: (id: string) => Promise<NotaResponseId>
 }
+// Tipo para el contexto de estudiantes
+export type EstudiantesContextType = {
+  estudiantes: GetEstudiante[] | undefined
+  loading: boolean
+  error: string | null
+  getEstudiantes: () => Promise<void>
+  getEstudianteById: (id: string) => Promise<EstudianteResponseById | undefined>
+  putEstudiante: (
+    id: string,
+    datos: EstudianteForm
+  ) => Promise<EstudianteActualizadoResponse | undefined>
+  getEstudianteByProfesor: (profesorId: string | undefined) => Promise<void>
+  postEstudiante: (datos: EstudianteFormInputs) => Promise<void>
+}
 // Tipos para los formularios
 export type LoginFormInputs = z.infer<typeof loginZodSchema>
 export type AuthFormValues = z.infer<typeof authZodSchema>
+export type EstudianteFormInputs = z.infer<typeof estudianteZodSchema>

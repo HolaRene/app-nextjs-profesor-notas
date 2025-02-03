@@ -79,3 +79,31 @@ export const notasZodSchema = z.object({
     .max(100, { message: 'La calificación máxima es 100' }),
   profesor: z.string().optional(), // El profesor es opcional
 })
+
+export const estudianteZodSchema = z.object({
+  nombre: z.string().min(1, 'El nombre es requerido'),
+  apellido: z.string().min(1, 'El apellido es requerido'),
+  edad: z
+    .number()
+    .min(1, 'La edad es requerida')
+    .max(20, 'La edad no puede ser mayor a 120'),
+  grado: z.enum(['sexto', 'cuarto', 'quinto'], {
+    errorMap: () => ({ message: 'Selecciona un grado válido' }),
+  }),
+  description: z.string().min(1, 'La descripción es requerida'),
+  sexo: z.enum(['masculino', 'femenino'], {
+    errorMap: () => ({ message: 'Selecciona un sexo válido' }),
+  }),
+})
+
+export const estudianteActualizarZodSchema = z.object({
+  nombre: z.string().min(1, 'El nombre es requerido'),
+  apellido: z.string().min(1, 'El apellido es requerido'),
+  grado: z.enum(['cuarto', 'quinto', 'sexto']),
+  profesorId: z.string().min(1, 'El ID del profesor es requerido'),
+  edad: z
+    .number()
+    .min(5, 'La edad mínima es 5')
+    .max(20, 'La edad máxima es 20'),
+  sexo: z.enum(['masculino', 'femenino']),
+})

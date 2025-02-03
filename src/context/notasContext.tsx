@@ -29,7 +29,6 @@ export const NotasProvider = ({ children }: { children: ReactNode }) => {
   const [notasID, setNotasId] = useState<NotasIdState>()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
   // Función para obtener las notas
   const obtenerNotas = async () => {
     setLoading(true)
@@ -53,10 +52,8 @@ export const NotasProvider = ({ children }: { children: ReactNode }) => {
       setNotasActualizar(response.data.updNota)
     } catch (error) {
       if (error instanceof Error) {
-        // Si el error es una instancia de Error, extrae el mensaje
         setError(error.message)
       } else {
-        // Si no es una instancia de Error, muestra un mensaje genérico
         setError('Error en el registro')
       }
       console.error('Error en el registro:', error)

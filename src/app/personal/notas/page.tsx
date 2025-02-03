@@ -1,10 +1,15 @@
 'use client'
-
+import { useEffect } from 'react'
 import { useNotas } from '@/context/notasContext'
 import Link from 'next/link'
 
 const NotasPage = () => {
   const { notas, loading, error, obtenerNotas } = useNotas()
+
+  // Llama a obtenerNotas cuando el componente se monte
+  useEffect(() => {
+    obtenerNotas()
+  }, [])
 
   if (loading) {
     return <p>Cargando notas...</p> // Muestra un mensaje de carga
@@ -49,12 +54,6 @@ const NotasPage = () => {
 
             {/* Botones de edición */}
             <div className='flex space-x-4 mt-4'>
-              <Link
-                href={`/personal/estudiantes/editar-estudiante/${nota.estudiante._id}`}
-                className='bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600'
-              >
-                Editar Estudiante
-              </Link>
               <Link
                 href={`/personal/estudiantes/editar-nota/${nota._id}`}
                 className='bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600'
